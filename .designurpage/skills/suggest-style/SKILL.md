@@ -37,26 +37,33 @@ allowed-tools: Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, mcp__Claude_P
 
 ### Phase B: 生成风格推荐
 
+读取 `.designurpage/dsl/presets.md` — 预设 DSL 库
 读取 `.designurpage/skills/shared-references/style-vocabulary.md`
 
-为每个推荐方向提供：
+为每个推荐方向提供完整的 **Design DSL preset** + 解释：
 
 ```markdown
 ## 推荐方向 1: [风格名]
 
 **为什么适合你**: [1-2句解释]
 
-**视觉特征**:
-- 字体: ...
-- 色彩: ...
-- 布局: ...
-- 动效: ...
+**Design DSL Preview** (7维度摘要):
+| 维度 | 值 |
+|------|-----|
+| style | minimal |
+| layout | single-column, center |
+| density | low |
+| typography | Inter, scale 1.25 |
+| color | monochrome, accent #007aff |
+| interaction | low, hover: opacity |
+| motion | subtle-fade, 200ms |
 
-**参考站点**: [可选，搜索类似风格的网站]
+**personality**: "clean, calm, premium"
+
+**参考站点**: [可选]
 
 **✅ 优点**: ...
 **⚠️ 注意**: ...
-**适合场景**: ...
 ```
 
 ### Phase C: Trade-off 对比表
@@ -87,8 +94,8 @@ allowed-tools: Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, mcp__Claude_P
 
 - **展示**: TOP_K 个推荐方向 + trade-off 表
 - **询问**: "你更偏向哪个方向？或者想混合某些特征？"
-- **选择 →** 更新 `DESIGN_INTENT.md` 的风格部分
-- **混合 →** 记录用户的混合偏好，更新 intent
+- **选择 →** 将选中的 DSL preset 写入 `DESIGN_INTENT.md`，建议 `/critique-design-dsl` 验证
+- **混合 →** "A的布局 + B的色彩" → 合并两个 preset 的指定维度，生成混合 DSL
 - **都不满意 →** 询问更多偏好，重新推荐
 
 ## Key Rules

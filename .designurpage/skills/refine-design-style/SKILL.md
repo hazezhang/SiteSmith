@@ -22,6 +22,7 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Agent, mcp__Claude_Preview__previe
 
 ## Prerequisites
 
+- `DESIGN_INTENT.md` 必须存在（含 Design DSL JSON）
 - `DESIGN_SYSTEM.md` 必须存在
 - `src/styles/variables.css` 必须存在
 
@@ -29,10 +30,11 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Agent, mcp__Claude_Preview__previe
 
 ### Phase A: 解析反馈 → 映射到 Design Tokens
 
-1. 读取当前 `DESIGN_SYSTEM.md`
+1. 从 `DESIGN_INTENT.md` 提取当前 Design DSL JSON
 2. 读取 `src/styles/variables.css` — 当前 CSS 变量值
-3. 读取 `.designurpage/skills/shared-references/style-vocabulary.md` — 风格映射表
-4. 将用户反馈分解为具体的 token 修改：
+3. 读取 `.designurpage/dsl/presets.md` — 自然语言→DSL diff 映射表
+4. 读取 `.designurpage/dsl/code-mapping.md` — DSL→CSS 翻译规则
+5. 将用户反馈先映射为 **DSL diff**，再由 DSL diff 计算 **CSS 变量 diff**：
 
 ```markdown
 ## Feedback Analysis

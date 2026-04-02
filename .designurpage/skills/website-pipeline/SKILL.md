@@ -27,15 +27,17 @@ allowed-tools: Read, Write, Edit, Bash(*), Grep, Glob, Agent, Skill, WebSearch, 
 ## Pipeline Overview
 
 ```
-Phase 1: Intent Capture
+Phase 1: Intent Capture → Design DSL
     │
-    ├── /capture-design-intent
-    ├── /suggest-style (optional)
+    ├── /capture-design-intent     → outputs Design DSL JSON
+    ├── /suggest-style (optional)  → recommends DSL presets
+    ├── /critique-design-dsl       → validates DSL before compile
     │
-    🚦 HITL-1: Design Approval Gate ←── 确认设计方向
+    🚦 HITL-1: Design Approval Gate ←── 确认设计方向 + DSL 参数
     │
-Phase 2: Planning & Design System
+Phase 2: DSL Compile + Planning
     │
+    ├── /translate-design-to-code  → DSL → CSS variables
     ├── /plan-website-structure
     ├── /generate-design-system
     │
@@ -91,7 +93,8 @@ Phase 6: Launch
 
 2. 检查 `DESIGN_MEMORY.json`（如果存在，告知用户"我记得你偏好..."）
 
-3. (可选) 调用 `/suggest-style` 获取 AI 风格建议
+3. (可选) 调用 `/suggest-style` 获取 AI 风格建议（输出 DSL preset）
+4. 调用 `/critique-design-dsl` 验证 DSL 合理性
 
 ### **🚦 HITL Gate 1: Design Approval**
 
@@ -113,10 +116,11 @@ Phase 6: Launch
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### Phase 2: Planning & Design System
+### Phase 2: DSL Compile + Planning
 
-1. 调用 `/plan-website-structure`
-2. 调用 `/generate-design-system`
+1. 调用 `/translate-design-to-code` — 将 Design DSL 编译为 CSS 变量
+2. 调用 `/plan-website-structure`
+3. 调用 `/generate-design-system` — 生成人可读的设计系统文档
 
 ### **🚦 HITL Gate 2: Structure & Style Confirmation**
 

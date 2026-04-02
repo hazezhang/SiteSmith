@@ -21,10 +21,14 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(python*), WebSearch
 
 ### Phase A: 读取设计输入
 
-1. 读取 `DESIGN_INTENT.md` — 风格、色彩、字体偏好
-2. 读取 `.designurpage/skills/shared-references/style-vocabulary.md` — CSS 映射
-3. 读取 `.designurpage/skills/shared-references/design-principles.md` — 设计原则
-4. 读取 `SITE_BLUEPRINT.md`（如果存在）— 了解组件需求
+1. 从 `DESIGN_INTENT.md` 提取 **Design DSL JSON** — 这是核心输入
+2. 读取 `.designurpage/dsl/code-mapping.md` — DSL→CSS 翻译规则
+3. 读取 `.designurpage/dsl/schema.md` — 验证 DSL 完整性
+4. 读取 `.designurpage/skills/shared-references/design-principles.md` — 设计原则
+5. 读取 `SITE_BLUEPRINT.md`（如果存在）— 了解组件需求
+
+> 本质上，此 skill = DSL 中各维度的展开 + 编译
+> 核心编译工作由 `/translate-design-to-code` 完成，本 skill 侧重于生成人可读的 DESIGN_SYSTEM.md 文档
 
 ### Phase B: 生成设计 Tokens
 
@@ -197,6 +201,7 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(python*), WebSearch
 
 ## Composing with Other Skills
 
+- DSL 编译 → `/translate-design-to-code` 生成 `variables.css`（可先于本 skill 运行）
 - 确认后 → `/project-scaffold` 创建项目并植入 variables.css
-- 需要调整 → `/refine-design-intent` + 重新生成
+- 需要调整 → `/refine-design-dsl` 修改 DSL 参数 → 重新生成
 - 一致性检查 → `/enforce-design-consistency` 确保全站遵循

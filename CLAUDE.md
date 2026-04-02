@@ -1,4 +1,4 @@
-# DesignUrPage — Website Generation Agent System
+# SiteSmith — Website Generation Agent System
 
 > 可控创意 + 可执行流水线：让用户像和设计师合作一样生成个人网站
 > "把设计师的思考过程结构化 + 可复用 + 可交互"
@@ -17,6 +17,11 @@ Design Intelligence Engine（设计智能引擎）
    ├── Design Critic        → /critique-design
    └── Consistency Guard    → /enforce-design-consistency
    ↓
+Design DSL（设计领域特定语言 — 7维度结构化表示）
+   ├── style / layout / density / typography / color / interaction / motion
+   ├── Presets: minimal, modern, creative, editorial, product, cyberpunk, portfolio, warm
+   └── DSL Compiler         → /translate-design-to-code
+   ↓
 Skill Router（能力调度 — /website-pipeline）
    ↓
 Execution Layer（组件/页面/样式生成）
@@ -25,33 +30,59 @@ Execution Layer（组件/页面/样式生成）
 ## Quick Start
 
 ```
-/capture-design-intent     ← 开始设计对话
+/capture-design-intent     ← 开始设计对话，输出 Design DSL
 /website-pipeline          ← 一键启动完整流水线（含所有HITL节点）
 ```
 
-## Skills Index (25 Skills)
+## Design DSL（核心中间表示）
+
+所有设计意图最终编译为 7 维度 DSL，所有代码生成从 DSL 出发：
+
+| 维度 | 含义 | 例子 |
+|------|------|------|
+| `style` | 风格 | minimal / creative / editorial |
+| `layout` | 布局结构 | grid / single-column / asymmetric |
+| `density` | 信息密度 | low / medium / high |
+| `typography` | 排版 | font pairing, scale, weight strategy |
+| `color` | 色彩策略 | monochrome / vibrant / soft / dark |
+| `interaction` | 交互强度 | hover/click/focus 行为 |
+| `motion` | 动效类型 | none / subtle-fade / scroll-driven |
+
+DSL 规范位于 `.designurpage/dsl/`：
+- `schema.md` — 完整 schema 定义 + 字段详解 + 验证规则
+- `presets.md` — 8 种预设风格 DSL + 自然语言→DSL映射表
+- `code-mapping.md` — DSL→CSS/HTML/JS 确定性翻译规则
+
+## Skills Index (33 Skills)
 
 ### Intent Layer（意图层）— 3 skills
 | Skill | 说明 |
 |-------|------|
-| `/capture-design-intent` | 设计师式对话捕获设计意图 → `DESIGN_INTENT.md` |
-| `/refine-design-intent` | 自然语言 → design intent diff（"更温暖""像X但更Y"）|
+| `/capture-design-intent` | 设计师式对话 → Design DSL JSON |
+| `/refine-design-intent` | 自然语言 → design intent diff |
 | `/website-pipeline` | 总调度器，串联全流程 + HITL gates |
 
 ### Design Intelligence Engine（设计智能引擎）— 5 skills
 | Skill | 说明 |
 |-------|------|
-| `/suggest-style` | AI 风格顾问：主动推荐 + trade-off 分析 + 设计人格 |
-| `/analyze-layout` | 布局智能分析：视觉锚点/信息层级/空间利用/流动性 |
-| `/suggest-interaction` | 微交互顾问：hover/scroll/transition 的"阻尼感"调优 |
-| `/critique-design` | AI 设计批评者：七维度评审 + 打分 + 可操作改进建议 |
+| `/suggest-style` | AI 风格顾问：推荐 DSL presets + trade-off 分析 |
+| `/analyze-layout` | 布局智能分析：视觉锚点/信息层级/空间利用 |
+| `/suggest-interaction` | 微交互顾问：hover/scroll/transition 阻尼感调优 |
+| `/critique-design` | AI 设计批评者：七维度评审 + 打分 |
 | `/enforce-design-consistency` | 设计一致性守护：扫描硬编码违规 + 自动修复 |
+
+### DSL Layer（DSL 编译层）— 3 skills ⭐ NEW
+| Skill | 说明 |
+|-------|------|
+| `/translate-design-to-code` | **DSL 编译器**: Design DSL → CSS变量 / Tailwind配置 / 组件代码 |
+| `/refine-design-dsl` | **DSL 精炼**: 自然语言 → DSL 参数 diff（用户改参数不改prompt）|
+| `/critique-design-dsl` | **DSL 审查**: 编译前检查维度冲突/可访问性/一致性 |
 
 ### Planning（规划）— 2 skills
 | Skill | 说明 |
 |-------|------|
 | `/plan-website-structure` | 设计意图 → 站点地图 + 组件规划 + 技术方案 |
-| `/generate-design-system` | 完整设计系统：色彩/字体/间距/圆角/阴影/动效 + CSS 变量 |
+| `/generate-design-system` | 完整设计系统文档（基于 DSL 编译输出）|
 
 ### Execution（生成）— 7 skills
 | Skill | 说明 |
@@ -67,7 +98,7 @@ Execution Layer（组件/页面/样式生成）
 ### Refinement（迭代优化）⭐ — 3 skills
 | Skill | 说明 |
 |-------|------|
-| `/refine-design-style` | **核心创新**: 自然语言 → CSS变量 diff → 全站增量更新 |
+| `/refine-design-style` | 自然语言 → DSL diff → CSS变量 diff → 全站增量更新 |
 | `/patch-component` | 组件局部 diff 修改，不重生成 |
 | `/refactor-layout` | 重新组织布局，保持内容和样式不变 |
 
@@ -88,38 +119,63 @@ Execution Layer（组件/页面/样式生成）
 | `/deploy-setup` | Vercel / Netlify / GitHub Pages 部署引导 |
 | `/pre-launch-checklist` | 上线前完整检查清单 |
 
-## State Files（状态文件 — Skill间传递信息）
+### GitHub Pages（GitHub Pages 专用）— 5 skills
+| Skill | 说明 |
+|-------|------|
+| `/classify-github-pages-archetype` | 站点原型顾问：学术/开发者/项目/写作/品牌 |
+| `/recommend-pages-publishing-mode` | 部署模式推荐：branch / Actions / Jekyll |
+| `/generate-pages-workflow` | 生成 Actions workflow + .nojekyll + 部署文件 |
+| `/generate-404-page` | 自定义 404 页面（匹配设计风格）|
+| `/generate-cname-config` | 自定义域名配置 + DNS 指引 |
+
+**5 Archetypes（站点原型 — 扩展 Design DSL）**:
+| 原型 | 适合 | 默认风格 |
+|------|------|---------|
+| `academic-profile` | 教授/研究员/博士生 | minimal, serif, no motion |
+| `developer-portfolio` | 软件工程师/AI工程师 | modern, grid, dark mode |
+| `project-showcase` | 开源项目/比赛作品 | product, storytelling, CTA |
+| `writing-site` | 技术博客/研究笔记 | editorial, reading-column, Jekyll |
+| `hybrid-brand` | 求职/多面手/个人品牌 | modern, modular, balanced |
+
+## Data Flow（数据流）
+
+```
+自然语言 → Design DSL JSON → CSS Variables → HTML/Components
+           ↑                    ↑
+  /capture-design-intent   /translate-design-to-code
+  /refine-design-dsl
+```
+
+## State Files（状态文件）
 
 | 文件 | 生成者 | 说明 |
 |------|--------|------|
-| `DESIGN_INTENT.md` | capture-design-intent | 结构化设计意图（风格/色彩/布局/灵感）|
+| `DESIGN_INTENT.md` | capture-design-intent | 设计意图 + **内嵌 Design DSL JSON** |
 | `SITE_BLUEPRINT.md` | plan-website-structure | 站点地图 + 组件规划 |
-| `DESIGN_SYSTEM.md` | generate-design-system | 字体/间距/颜色规则/CSS变量 |
+| `DESIGN_SYSTEM.md` | generate-design-system | 人可读的设计系统文档 |
 | `BUILD_LOG.md` | 各生成skill | 构建进度 + 已完成组件清单 |
 | `DESIGN_MEMORY.json` | 系统积累 | 用户风格偏好记忆（跨session继承）|
 
 ## HITL Checkpoints（人机协作节点）
 
 ```
-🚦 HITL-1: Design Approval Gate   → 生成前确认方向（避免AI"自嗨"）
-🎨 HITL-2: Style Editing Loop     → 自然语言 → CSS diff → 增量更新
+🚦 HITL-1: Design Approval Gate   → 确认 DSL 参数（避免AI"自嗨"）
+🎨 HITL-2: Style Editing Loop     → 自然语言 → DSL diff → CSS diff → 增量更新
 🧪 HITL-3: Preview → Feedback → Patch → 预览后局部修改
 ```
 
 ## Core Design Principles
 
-1. **不重生成，只做 diff** — 风格调整和组件修改永远是增量更新（CSS变量级联）
-2. **结构化意图** — 用户的模糊表达（"像Apple但更活泼"）被转化为结构化 spec
-3. **Design Memory** — 系统记住用户偏好，跨 session 继承（confirmed + rejected）
-4. **主动建议 > 被动询问** — AI 像设计师一样提出方向 + 解释 trade-off
-5. **每个组件可独立运行** — 组件解耦，可单独测试、替换、patch
+1. **DSL 驱动** — 所有设计决策都表示为 7 维度 DSL，确定性编译为代码
+2. **不重生成，只做 diff** — 风格调整 = DSL diff → CSS 变量 diff → 全站自动生效
+3. **结构化意图** — "像Apple但更活泼" → DSL 参数变更，不是模糊 prompt
+4. **Design Memory** — 系统记住用户偏好，跨 session 继承
+5. **主动建议 > 被动询问** — AI 像设计师一样提出方向 + 解释 trade-off
 
-## Shared References（设计知识库）
+## Shared References
 
-位于 `.designurpage/skills/shared-references/`：
-- `design-principles.md` — 视觉设计原则（层次/留白/对比度/动效）
-- `web-best-practices.md` — Web开发最佳实践（性能/语义HTML/可访问性/安全）
-- `style-vocabulary.md` — 风格词汇 → CSS映射表（"温暖"→具体CSS变更）
+- `.designurpage/dsl/` — Design DSL 规范（schema + presets + code-mapping）
+- `.designurpage/skills/shared-references/` — 设计知识库（设计原则 + Web最佳实践 + 风格词汇表）
 
 ## Documentation
 

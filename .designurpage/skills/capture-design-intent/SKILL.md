@@ -111,19 +111,47 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Agent, WebSearch, WebFetch, mcp__C
 - **喜欢的元素**: [描述]
 - **不喜欢的元素**: [描述]
 
-## 结构化 Spec（供下游 skill 读取）
+## Design DSL（供下游 skill 编译，参考 `.designurpage/dsl/schema.md`）
+
+根据对话结果，从 `.designurpage/dsl/presets.md` 选择最匹配的 preset 作为基础，
+然后根据用户的具体偏好覆盖各维度：
+
 \```json
 {
-  "type": "...",
-  "style": "...",
-  "color_palette": [...],
-  "layout_preference": "...",
-  "sections": [...],
-  "inspiration_refs": [...],
-  "tone": "...",
-  "typography_preference": "...",
-  "animation_level": "...",
-  "dark_mode": false
+  "$schema": "design-dsl/v1",
+  "style": "minimal",
+  "layout": {
+    "type": "single-column",
+    "alignment": "center",
+    "max_width": "720px",
+    "section_spacing": "generous"
+  },
+  "density": "low",
+  "typography": {
+    "font_pairing": ["Inter", "Inter"],
+    "scale": "1.25",
+    "line_height": "1.6",
+    "weight_strategy": "contrast"
+  },
+  "color": {
+    "mode": "monochrome",
+    "accent": "#007aff",
+    "contrast": "high"
+  },
+  "interaction": {
+    "level": "low",
+    "hover": "opacity",
+    "click_feedback": "subtle-scale"
+  },
+  "motion": {
+    "type": "subtle-fade",
+    "duration": "200ms",
+    "easing": "ease-out",
+    "reduced_motion": true
+  },
+  "personality": "clean, calm, premium",
+  "sections": ["hero", "about", "projects", "contact"],
+  "inspiration_refs": []
 }
 \```
 ```
@@ -132,7 +160,7 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Agent, WebSearch, WebFetch, mcp__C
 
 - **展示**: 完整的 DESIGN_INTENT.md 摘要
 - **询问**: "这个设计方向是否准确？有什么需要调整的吗？"
-- **确认 →** 写入 `DESIGN_INTENT.md`，建议下一步：`/plan-website-structure` 或 `/suggest-style`
+- **确认 →** 写入 `DESIGN_INTENT.md`（含 Design DSL JSON），建议下一步：`/critique-design-dsl` 验证 → `/translate-design-to-code` 编译
 - **修改 →** 回到 Phase B 对应环节
 - **否决 →** 重新开始 Phase B
 
@@ -146,6 +174,8 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Agent, WebSearch, WebFetch, mcp__C
 
 ## Composing with Other Skills
 
-- 完成后建议 → `/suggest-style` 获取 AI 风格建议
-- 完成后建议 → `/plan-website-structure` 开始结构规划
-- 如果用户中途想修改 → `/refine-design-intent`
+- 完成后建议 → `/critique-design-dsl` 检查 DSL 合理性
+- 完成后建议 → `/suggest-style` 获取 AI 风格建议（会更新 DSL）
+- DSL 确认后 → `/translate-design-to-code` 编译为 CSS 变量
+- 如果用户中途想修改 → `/refine-design-dsl`（修改 DSL 参数）
+- 结构规划 → `/plan-website-structure` 开始站点规划
