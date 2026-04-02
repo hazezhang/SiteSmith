@@ -1,0 +1,22 @@
+# Generated state files (user-specific)
+DESIGN_INTENT.md
+SITE_BLUEPRINT.md
+DESIGN_SYSTEM.md
+BUILD_LOG.md
+DESIGN_MEMORY.json
+
+# Generated website output
+src/
+
+# Node
+node_modules/
+package-lock.json
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
