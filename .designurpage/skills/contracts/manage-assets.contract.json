@@ -1,0 +1,50 @@
+{
+  "name": "manage-assets",
+  "version": "1.0",
+  "input_schema": {
+    "required_files": [
+      { "path": "src/assets/", "type": "directory" }
+    ],
+    "optional_files": [
+      { "path": "DESIGN_SYSTEM.md", "purpose": "placeholder style matching" }
+    ],
+    "arguments": {
+      "type": "enum",
+      "values": ["inventory", "bind", "placeholder"],
+      "required": true
+    }
+  },
+  "output_schema": {
+    "inventory": {
+      "format": "markdown_table",
+      "columns": ["file", "size", "format", "dimensions", "recommended_use", "status"]
+    },
+    "bind": {
+      "files_modified": "src/*.html",
+      "changes": "Replace placeholder elements with <picture>/<img> referencing real assets"
+    },
+    "placeholder": {
+      "files_created": "SVG/CSS placeholders in src/ HTML files"
+    }
+  },
+  "constraints": [
+    "Always set width/height on img tags",
+    "Always set alt text",
+    "Hero images: loading=eager; others: loading=lazy",
+    "Prefer WebP with fallback via <picture>"
+  ],
+  "preconditions": [
+    "src/assets/ directory exists"
+  ],
+  "postconditions": [
+    "All img tags have alt attributes",
+    "All img tags have width and height",
+    "No layout shift from image loading"
+  ],
+  "routing": {
+    "triggers": ["add image", "upload photo", "use my avatar", "project screenshot"],
+    "next": ["optimize-images", "performance-check"],
+    "prev": ["generate-page", "generate-hero"],
+    "conflicts_with": []
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "translate-design-to-code",
+  "version": "1.0",
+  "input_schema": {
+    "required_files": [
+      { "path": "DESIGN_INTENT.md", "must_contain": ["\"style\":"] }
+    ],
+    "optional_files": [
+      { "path": "SITE_BLUEPRINT.md", "purpose": "tech stack selection" }
+    ],
+    "arguments": {
+      "type": "string",
+      "description": "DSL source: file path or inline JSON",
+      "required": false
+    }
+  },
+  "output_schema": {
+    "files": [
+      {
+        "path": "src/styles/variables.css",
+        "format": "css",
+        "must_contain": [":root", "--color-primary", "--font-heading", "--container-max", "@import url"]
+      },
+      {
+        "path": "src/styles/base.css",
+        "format": "css",
+        "must_contain": ["box-sizing: border-box", ".container", ".card", ".btn"]
+      },
+      {
+        "path": "src/styles/interactions.css",
+        "format": "css",
+        "must_contain": [":hover"]
+      },
+      {
+        "path": "src/scripts/interactions.js",
+        "format": "javascript",
+        "must_contain": ["IntersectionObserver"]
+      }
+    ],
+    "state_updates": [
+      { "file": "BUILD_LOG.md", "action": "append" }
+    ]
+  },
+  "constraints": [
+    "Deterministic: same DSL input -> identical CSS output",
+    "All values via CSS custom properties -- zero hardcoded colors/sizes",
+    "Must use @sitesmith/dsl-engine compile() when available"
+  ],
+  "preconditions": [
+    "DESIGN_INTENT.md exists with valid DSL JSON block"
+  ],
+  "postconditions": [
+    "variables.css contains all DSL dimension variables",
+    "Color contrast meets WCAG AA (4.5:1 for text)",
+    "Font import URL is valid Google Fonts URL"
+  ],
+  "routing": {
+    "triggers": ["compile", "generate CSS", "build styles", "translate to code"],
+    "next": ["project-scaffold", "generate-design-system", "generate-page"],
+    "prev": ["capture-design-intent", "refine-design-dsl", "critique-design-dsl"],
+    "conflicts_with": []
+  }
+}

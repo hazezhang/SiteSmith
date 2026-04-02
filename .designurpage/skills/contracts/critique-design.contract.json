@@ -1,0 +1,57 @@
+{
+  "name": "critique-design",
+  "version": "1.0",
+  "input_schema": {
+    "required_files": [
+      { "path": "DESIGN_INTENT.md", "purpose": "evaluation criteria" },
+      { "path": "src/*.html", "purpose": "pages to evaluate" }
+    ],
+    "optional_files": [
+      { "path": "DESIGN_SYSTEM.md", "purpose": "consistency checking" }
+    ],
+    "arguments": {
+      "type": "string",
+      "description": "Page path or 'all'",
+      "required": false,
+      "default": "all"
+    }
+  },
+  "output_schema": {
+    "report": {
+      "format": "markdown",
+      "structure": {
+        "overall_score": "number (0-100)",
+        "dimension_scores": {
+          "hierarchy_clarity": "number (0-20)",
+          "color_contrast": "number (0-20)",
+          "typography": "number (0-15)",
+          "layout_spacing": "number (0-20)",
+          "consistency": "number (0-10)",
+          "responsiveness": "number (0-10)",
+          "interaction_polish": "number (0-5)"
+        },
+        "critical_issues": "array of {issue, reason, fix_suggestion, fix_skill}",
+        "improvements": "array of {suggestion, reason, how}",
+        "highlights": "array of {highlight, why}"
+      }
+    }
+  },
+  "constraints": [
+    "Evaluate against DESIGN_INTENT, not absolute standards",
+    "Every issue must map to a fix skill",
+    "Include both problems and highlights"
+  ],
+  "preconditions": [
+    "At least one generated HTML page exists"
+  ],
+  "postconditions": [
+    "Critique report is shown to user",
+    "Each critical issue has an actionable fix"
+  ],
+  "routing": {
+    "triggers": ["critique", "review design", "evaluate", "how does it look"],
+    "next": ["patch-component", "refine-design-style", "refactor-layout"],
+    "prev": ["generate-page", "apply-responsive-design"],
+    "conflicts_with": []
+  }
+}

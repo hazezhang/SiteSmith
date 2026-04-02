@@ -110,12 +110,59 @@ allowed-tools: Read, Write, Edit, Grep, Glob, mcp__Claude_Preview__preview_start
 - **选择修复 →** 用户指定要改的项目
 - **仅记录 →** 保存报告供后续参考
 
+## Phase D: DSL Diff 修复提案 ⭐ NEW
+
+不只给文字建议 — 输出机器可执行的 DSL diff：
+
+```markdown
+### 自动修复提案
+
+#### 🔴 Issue: Hero 标题对比度不足
+**诊断**: 当前 color.contrast="medium" + heading weight=600, hierarchy.depth="flat"
+**DSL Diff**:
+```json
+{
+  "hierarchy": { "depth": "moderate", "contrast_strategy": "typography" },
+  "typography": { "weight_strategy": "heavy-headings" }
+}
+```
+**效果**: heading 字重 600→900, 层级感增强
+**修复命令**: `/refine-design-dsl "更强的标题层级"`
+```
+
+每个 critical issue 都必须附带：
+1. **诊断** — 指出是哪个 DSL 维度的参数导致了问题
+2. **DSL Diff** — 建议的参数变更
+3. **修复命令** — 用户可以直接执行的 slash command
+
+## Three-Layer Review Architecture
+
+本 skill 是三层审查体系的 Layer 1：
+
+```
+Layer 1: Design Critic (本skill)
+    → 10维度评分 + 诊断 + DSL diff 修复提案
+    → 关注: 技术正确性、可用性、设计系统一致性
+    ↓
+Layer 2: /enforce-design-consistency (已有)
+    → 跨页面/组件一致性扫描
+    → 关注: token合规、风格统一、无"野代码"
+    ↓
+Layer 3: /senior-designer-review (NEW)
+    → 站在用户角度的整体审查
+    → 关注: 第一印象、情感传达、品牌一致性
+    → 输出: prioritized action list + rebuttal-style 反驳
+```
+
+完整审查流程: `/critique-design all` → `/enforce-design-consistency` → `/senior-designer-review`
+
 ## Key Rules
 
 1. **基于设计意图评判** — minimal 风格不扣"内容太少"的分
 2. **给具体建议** — 不只说"不好"，要说怎么改
 3. **先肯定后批评** — 发现亮点也要说
 4. **可操作** — 每个问题都映射到一个修复skill
+5. **输出 DSL diff** — 每个 critical issue 必须附带参数变更建议
 
 ## Composing with Other Skills
 
@@ -123,3 +170,4 @@ allowed-tools: Read, Write, Edit, Grep, Glob, mcp__Claude_Preview__preview_start
 - 布局问题 → `/analyze-layout` 深入分析 → `/refactor-layout`
 - 交互问题 → `/suggest-interaction`
 - 可访问性问题 → `/accessibility-audit`
+- 全站审查 → `/enforce-design-consistency` + `/senior-designer-review`

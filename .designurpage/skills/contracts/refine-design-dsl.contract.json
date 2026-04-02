@@ -1,0 +1,50 @@
+{
+  "name": "refine-design-dsl",
+  "version": "1.0",
+  "input_schema": {
+    "required_files": [
+      { "path": "DESIGN_INTENT.md", "must_contain": ["\"style\":"] }
+    ],
+    "arguments": {
+      "type": "string",
+      "description": "Natural language refinement (e.g., 'warmer', 'more techy', 'less flashy')",
+      "required": true
+    }
+  },
+  "output_schema": {
+    "dsl_diff": {
+      "format": "json",
+      "description": "Changed DSL parameters only",
+      "example": {
+        "color.mode": { "from": "vibrant", "to": "monochrome" },
+        "interaction.level": { "from": "high", "to": "low" }
+      }
+    },
+    "files": [
+      {
+        "path": "DESIGN_INTENT.md",
+        "action": "update",
+        "description": "Update embedded DSL JSON with new values"
+      }
+    ]
+  },
+  "constraints": [
+    "Must output explicit DSL diff (before -> after)",
+    "Must show diff to user before applying",
+    "Only modify parameters that match the refinement request",
+    "Reference presets.md Natural Language -> DSL Diff Mapping table"
+  ],
+  "preconditions": [
+    "DESIGN_INTENT.md exists with valid DSL JSON"
+  ],
+  "postconditions": [
+    "DSL diff is applied to DESIGN_INTENT.md",
+    "Updated DSL still passes validate()"
+  ],
+  "routing": {
+    "triggers": ["warmer", "cooler", "simpler", "bolder", "refine style", "change style", "too flashy", "too bland"],
+    "next": ["translate-design-to-code", "critique-design-dsl"],
+    "prev": ["capture-design-intent", "critique-design"],
+    "conflicts_with": []
+  }
+}

@@ -57,7 +57,7 @@ DSL 规范位于 `.designurpage/dsl/`：
 - `presets.md` — 8 种预设风格 DSL + 自然语言→DSL映射表
 - `code-mapping.md` — DSL→CSS/HTML/JS 确定性翻译规则
 
-## Skills Index (35 Skills)
+## Skills Index (36 Skills)
 
 ### Intent Layer（意图层）— 3 skills
 | Skill | 说明 |
@@ -66,14 +66,15 @@ DSL 规范位于 `.designurpage/dsl/`：
 | `/refine-design-intent` | 自然语言 → design intent diff |
 | `/website-pipeline` | 总调度器，串联全流程 + HITL gates |
 
-### Design Intelligence Engine（设计智能引擎）— 5 skills
+### Design Intelligence Engine（设计智能引擎）— 6 skills
 | Skill | 说明 |
 |-------|------|
 | `/suggest-style` | AI 风格顾问：推荐 DSL presets + trade-off 分析 |
 | `/analyze-layout` | 布局智能分析：视觉锚点/信息层级/空间利用 |
 | `/suggest-interaction` | 微交互顾问：hover/scroll/transition 阻尼感调优 |
-| `/critique-design` | AI 设计批评者：七维度评审 + 打分 |
-| `/enforce-design-consistency` | 设计一致性守护：扫描硬编码违规 + 自动修复 |
+| `/critique-design` | AI 设计批评者：10维度评审 + DSL diff 修复提案（Layer 1）|
+| `/enforce-design-consistency` | 设计一致性守护：扫描硬编码违规 + 自动修复（Layer 2）|
+| `/senior-designer-review` | 资深设计师终审：5秒测试 + 用户旅程 + rebuttal 辩论（Layer 3）⭐ NEW |
 
 ### DSL Layer（DSL 编译层）— 3 skills ⭐ NEW
 | Skill | 说明 |
@@ -174,18 +175,53 @@ DSL 规范位于 `.designurpage/dsl/`：
 🧪 HITL-3: Preview → Feedback → Patch → 预览后局部修改
 ```
 
+## Three-Layer Design Review（三层设计审查）
+
+```
+Layer 1: /critique-design           → 10维度评分 + DSL diff 修复提案
+Layer 2: /enforce-design-consistency → 跨页面 token 合规扫描
+Layer 3: /senior-designer-review    → 用户视角终审 + rebuttal 辩论
+```
+
+## Skill Contracts（技能合约）
+
+每个 skill 有形式化合约（`.designurpage/skills/contracts/*.contract.json`），定义：
+- `input_schema` — 必需/可选文件 + 参数类型
+- `output_schema` — 输出文件 + 必含内容 + 禁止内容
+- `preconditions` / `postconditions` — 可验证的前后置条件
+- `routing` — 触发词 + 前后 skill 链 + 冲突检测
+
+合约规范: `.designurpage/skills/SKILL_SCHEMA.md`
+
+## Evaluation Framework（评估框架）
+
+`eval/` 目录包含研究级评估系统：
+
+| 指标 | 维度 | 说明 |
+|------|------|------|
+| **DQS** (Design Quality Score) | 7 子维度 | 自动化设计质量评分（0-100）|
+| **IFS** (Intent Fidelity Score) | 5 检查项 | DSL→输出忠实度（0-100）|
+| **DS** (Diversity Score) | 跨预设 | 8 预设间视觉差异性（0-1）|
+| **USP** (User Satisfaction Proxy) | HITL 行为 | 用户满意度代理指标 |
+
+自动化评分: `eval/metrics.ts` (36 tests passing)
+人工评审: `eval/rubric.md` (5-point scale per dimension)
+
 ## Core Design Principles
 
-1. **DSL 驱动** — 所有设计决策都表示为 7 维度 DSL，确定性编译为代码
+1. **DSL 驱动** — 所有设计决策都表示为 10 维度 DSL，确定性编译为代码
 2. **不重生成，只做 diff** — 风格调整 = DSL diff → CSS 变量 diff → 全站自动生效
 3. **结构化意图** — "像Apple但更活泼" → DSL 参数变更，不是模糊 prompt
 4. **Design Memory** — 系统记住用户偏好，跨 session 继承
 5. **主动建议 > 被动询问** — AI 像设计师一样提出方向 + 解释 trade-off
+6. **合约驱动** — 每个 skill 有形式化 input/output schema，可路由、可验证、可评估
 
 ## Shared References
 
 - `.designurpage/dsl/` — Design DSL 规范（schema + presets + code-mapping）
 - `.designurpage/skills/shared-references/` — 设计知识库（设计原则 + Web最佳实践 + 风格词汇表）
+- `.designurpage/skills/contracts/` — Skill 形式化合约（JSON schema）
+- `eval/` — 评估框架（metrics + rubric + tests）
 
 ## Documentation
 

@@ -1,0 +1,48 @@
+{
+  "name": "capture-design-intent",
+  "version": "1.0",
+  "input_schema": {
+    "required_files": [],
+    "optional_files": [
+      { "path": "DESIGN_MEMORY.json", "purpose": "historical preferences" }
+    ],
+    "arguments": {
+      "type": "string",
+      "description": "Initial website description (can be vague)",
+      "required": false
+    }
+  },
+  "output_schema": {
+    "files": [
+      {
+        "path": "DESIGN_INTENT.md",
+        "format": "markdown",
+        "must_contain": ["## Design DSL", "\"style\":", "\"layout\":", "\"color\":"],
+        "json_block": {
+          "schema": "DesignDSL",
+          "required_fields": ["style", "layout", "density", "typography", "color", "interaction", "motion"]
+        }
+      }
+    ],
+    "state_updates": [
+      { "file": "DESIGN_MEMORY.json", "action": "merge", "condition": "if_exists" }
+    ]
+  },
+  "constraints": [
+    "Maximum 5 conversation rounds",
+    "Must suggest at least 2 style directions with trade-offs",
+    "Must output valid DesignDSL JSON"
+  ],
+  "preconditions": [],
+  "postconditions": [
+    "DESIGN_INTENT.md exists",
+    "Embedded DSL JSON passes validate()",
+    "All 7 required DSL dimensions are present"
+  ],
+  "routing": {
+    "triggers": ["design intent", "start website", "new site", "I want a website"],
+    "next": ["critique-design-dsl", "suggest-style", "translate-design-to-code"],
+    "prev": [],
+    "conflicts_with": []
+  }
+}

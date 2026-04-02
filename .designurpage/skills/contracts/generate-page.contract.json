@@ -1,0 +1,50 @@
+{
+  "name": "generate-page",
+  "version": "1.0",
+  "input_schema": {
+    "required_files": [
+      { "path": "DESIGN_SYSTEM.md", "purpose": "design tokens" },
+      { "path": "SITE_BLUEPRINT.md", "purpose": "page spec" },
+      { "path": "src/styles/variables.css", "purpose": "compiled CSS variables" }
+    ],
+    "arguments": {
+      "type": "string",
+      "description": "Page name (e.g., 'index', 'about', 'projects')",
+      "required": true
+    }
+  },
+  "output_schema": {
+    "files": [
+      {
+        "path": "src/{page_name}.html",
+        "format": "html",
+        "must_contain": ["<!DOCTYPE html>", "<html", "variables.css", "base.css"],
+        "must_not_contain": ["style=\"color:", "style=\"font-size:"]
+      }
+    ],
+    "state_updates": [
+      { "file": "BUILD_LOG.md", "action": "append" }
+    ]
+  },
+  "constraints": [
+    "All styling via CSS classes and design tokens -- no inline styles for design properties",
+    "Semantic HTML5 elements (section, nav, main, article)",
+    "All images must have alt attributes",
+    "All interactive elements must be keyboard accessible"
+  ],
+  "preconditions": [
+    "Design system CSS files exist in src/styles/",
+    "SITE_BLUEPRINT.md defines the requested page"
+  ],
+  "postconditions": [
+    "Generated HTML references all required CSS files",
+    "No hardcoded color/font/spacing values in HTML",
+    "All sections from DSL sections[] are present"
+  ],
+  "routing": {
+    "triggers": ["generate page", "create page", "build page"],
+    "next": ["manage-assets", "apply-responsive-design", "critique-design"],
+    "prev": ["project-scaffold", "generate-navbar", "generate-footer"],
+    "conflicts_with": []
+  }
+}
