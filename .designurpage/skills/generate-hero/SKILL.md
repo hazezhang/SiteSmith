@@ -54,8 +54,41 @@ allowed-tools: Read, Write, Edit, Grep, Glob
 - **确认 →** 保存 + 更新 BUILD_LOG.md
 - **调整 →** 修改布局/文案/样式
 
+## Asset Slots — 素材插槽
+
+Hero 区域支持以下素材插槽，有素材时绑定真实图片，无素材时使用 placeholder：
+
+| 插槽 | 文件路径 | Placeholder |
+|------|---------|-------------|
+| 头像 | `assets/images/avatar.*` | 首字母 SVG 圆形（使用设计系统配色）|
+| 背景图 | `assets/images/hero-bg.*` | CSS gradient（匹配 DSL color 维度）|
+
+**头像绑定示例**：
+```html
+<!-- 有素材时 -->
+<img src="assets/images/avatar.webp" alt="Name" class="hero-avatar"
+     width="120" height="120" loading="eager">
+
+<!-- 无素材时（SVG placeholder）-->
+<svg class="hero-avatar" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="60" fill="url(#avatar-gradient)"/>
+  <text x="60" y="65" text-anchor="middle" fill="white" font-size="48">HZ</text>
+</svg>
+```
+
+**背景图绑定示例**（fullscreen 布局）：
+```html
+<section class="hero" style="background-image: url('assets/images/hero-bg.webp')">
+  <div class="hero-overlay">...</div>
+</section>
+```
+
+使用 `/manage-assets bind` 可以自动完成素材绑定。
+
 ## Key Rules
 
 1. **一个焦点** — Hero 区域只有一个核心信息 + 一个 CTA
 2. **大字体** — 标题至少 `--text-3xl`（mobile）/ `--text-4xl`（desktop）
 3. **对比度** — CTA 按钮必须是视觉上最突出的元素
+4. **头像 loading="eager"** — 首屏资源不延迟加载
+5. **设置 width/height** — 防止布局偏移（CLS）

@@ -51,9 +51,12 @@ src/
 │   ├── main.js             # 主逻辑（导航、暗色模式等）
 │   └── interactions.js     # 交互/动效
 ├── assets/
-│   ├── images/
-│   ├── fonts/
-│   └── icons/
+│   ├── images/             # 用户素材（头像、截图等）
+│   │   └── projects/       # 项目截图子目录
+│   ├── fonts/              # 自定义字体（可选）
+│   └── icons/              # favicon + app icons
+│       ├── favicon.svg     # 矢量 favicon（推荐）
+│       └── apple-touch-icon.png  # 180×180
 └── favicon.ico
 ```
 

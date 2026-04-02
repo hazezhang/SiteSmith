@@ -57,7 +57,7 @@ DSL 规范位于 `.designurpage/dsl/`：
 - `presets.md` — 8 种预设风格 DSL + 自然语言→DSL映射表
 - `code-mapping.md` — DSL→CSS/HTML/JS 确定性翻译规则
 
-## Skills Index (33 Skills)
+## Skills Index (35 Skills)
 
 ### Intent Layer（意图层）— 3 skills
 | Skill | 说明 |
@@ -113,6 +113,12 @@ DSL 规范位于 `.designurpage/dsl/`：
 | `/generate-bio` | 个人简介（多长度 + 多风格）|
 | `/curate-portfolio` | 作品集策划（选择 + 排序 + 描述）|
 | `/setup-blog` | 博客搭建（列表页 + 详情页 + Markdown 支持）|
+
+### Assets（素材管理）— 2 skills
+| Skill | 说明 |
+|-------|------|
+| `/manage-assets` | 素材盘点/绑定/占位图 — 用户提供图片后自动放置并绑定到组件 |
+| `/optimize-images` | 图片压缩 + WebP 转换 + 响应式 srcset + 性能审计 |
 
 ### Quality & Deploy（质量 + 部署）— 5 skills
 | Skill | 说明 |
