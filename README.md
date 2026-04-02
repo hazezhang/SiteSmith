@@ -1,5 +1,7 @@
 # SiteSmith
 
+[中文版 README](README_CN.md) | English
+
 **Controllable Creativity + Executable Pipeline for Personal Website Generation**
 
 > "Not just another website builder — SiteSmith turns the design thinking process into a structured DSL, reusable skills, and interactive human-in-the-loop workflows."

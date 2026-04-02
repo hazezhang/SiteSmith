@@ -5,13 +5,16 @@ DESIGN_SYSTEM.md
 BUILD_LOG.md
 DESIGN_MEMORY.json
 
-# Generated website output
-src/
+# Generated website output (root-level only)
+/src/
 
 # Node
 node_modules/
 package-lock.json
 dist/
+
+# DSL Engine — include source, exclude build
+!packages/dsl-engine/src/
 
 # OS
 .DS_Store
