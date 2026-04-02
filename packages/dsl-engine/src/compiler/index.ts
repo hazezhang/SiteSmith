@@ -5,6 +5,9 @@ import { compileTypographyVars, buildFontImportUrl } from './typography';
 import { compileColorVars } from './color';
 import { compileInteractionVars, compileInteractionCss } from './interaction';
 import { compileMotionVars, compileMotionCss, compileMotionJs } from './motion';
+import { compileHierarchyVars, compileHierarchyCss } from './hierarchy';
+import { compileSpacingVars, compileSpacingCss } from './spacing';
+import { compileInformationVars, compileInformationCss } from './information';
 import { rootBlock, section, comment } from '../utils/css-builder';
 
 const SPACING_SCALE: Record<string, string> = {
@@ -16,13 +19,16 @@ const SPACING_SCALE: Record<string, string> = {
 export function compile(dsl: DesignDSL): CompileResult {
   const warnings: string[] = [];
 
-  // 1. Compile all dimension variables
+  // 1. Compile all 10 dimension variables
   const layoutVars = compileLayoutVars(dsl.layout);
   const densityVars = compileDensityVars(dsl.density);
   const typoVars = compileTypographyVars(dsl.typography);
   const colorVars = compileColorVars(dsl.color);
   const interactionVars = compileInteractionVars(dsl.interaction);
   const motionVars = compileMotionVars(dsl.motion);
+  const hierarchyVars = compileHierarchyVars(dsl.hierarchy);
+  const spacingVars = compileSpacingVars(dsl.spacing);
+  const informationVars = compileInformationVars(dsl.information);
 
   // 2. Build font import URL
   const fontImportUrl = buildFontImportUrl(
@@ -30,7 +36,12 @@ export function compile(dsl: DesignDSL): CompileResult {
     dsl.typography.weight_strategy ?? 'contrast'
   );
 
-  // 3. Assemble variables.css
+  // 3. Resolve personality display string
+  const personalityStr = Array.isArray(dsl.personality)
+    ? dsl.personality.join(', ')
+    : (dsl.personality ?? '');
+
+  // 4. Assemble variables.css
   const allVars = {
     ...layoutVars,
     ...densityVars,
@@ -38,35 +49,41 @@ export function compile(dsl: DesignDSL): CompileResult {
     ...colorVars,
     ...interactionVars,
     ...motionVars,
+    ...hierarchyVars,
+    ...spacingVars,
+    ...informationVars,
     ...SPACING_SCALE,
   };
 
   const variablesCss = [
     comment(`Design DSL → CSS Variables (Auto-compiled by @sitesmith/dsl-engine)`),
-    comment(`Style: ${dsl.style} | Color: ${dsl.color.mode} | Personality: ${dsl.personality ?? ''}`),
+    comment(`Style: ${dsl.style} | Color: ${dsl.color.mode} | Personality: ${personalityStr}`),
     '',
     `@import url('${fontImportUrl}');`,
     '',
     rootBlock(allVars),
   ].join('\n');
 
-  // 4. Assemble base.css
+  // 5. Assemble base.css
   const baseCss = [
     comment('Base Styles — Reset + Global (Auto-compiled)'),
     '',
     BASE_RESET,
     section('Layout', compileLayoutClasses(dsl.layout)),
     section('Components', BASE_COMPONENTS),
+    ...(dsl.hierarchy ? [section('Hierarchy', compileHierarchyCss(dsl.hierarchy))] : []),
+    ...(dsl.spacing ? [section('Spacing & Rhythm', compileSpacingCss(dsl.spacing))] : []),
+    ...(dsl.information ? [section('Information Architecture', compileInformationCss(dsl.information))] : []),
   ].join('\n');
 
-  // 5. Assemble interactions.css
+  // 6. Assemble interactions.css
   const interactionsCss = [
     comment('Interaction & Motion Styles (Auto-compiled)'),
     section('Hover / Click / Focus', compileInteractionCss(dsl.interaction)),
     section('Entrance Animation', compileMotionCss(dsl.motion)),
   ].join('\n');
 
-  // 6. interactions.js
+  // 7. interactions.js
   const interactionsJs = compileMotionJs(dsl.motion);
 
   return { variablesCss, baseCss, interactionsCss, interactionsJs, fontImportUrl, warnings };

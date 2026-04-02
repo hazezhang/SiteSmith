@@ -2,7 +2,7 @@
  * @sitesmith/dsl-engine
  *
  * Deterministic Design DSL compiler.
- * 7-dimension design language → CSS variables / base styles / interactions / JS.
+ * 10-dimension design language → CSS variables / base styles / interactions / JS.
  * Zero runtime dependencies. LLM-agnostic. Platform-independent.
  */
 
@@ -19,6 +19,9 @@ export type {
   ColorConfig,
   InteractionConfig,
   MotionConfig,
+  HierarchyConfig,
+  SpacingConfig,
+  InformationConfig,
   CompileResult,
   ValidationResult,
   ValidationError,
@@ -29,4 +32,15 @@ export type {
   MotionType,
   WeightStrategy,
   InteractionLevel,
+  HierarchyDepth,
+  ContrastStrategy,
+  SpacingBase,
+  Rhythm,
+  ContentStructure,
+  Scannability,
+  NavigationPattern,
+  Discoverability,
+  CognitiveLoad,
+  FeedbackStrength,
+  PersonalityTrait,
 } from './types';

@@ -1,5 +1,6 @@
 // ─── Design DSL Type System ───
 // Mirrors .designurpage/dsl/schema.md exactly
+// 10-dimension design language: style, layout, density, typography, color, interaction, motion, hierarchy, spacing, information
 
 export type StyleName =
   | 'minimal' | 'modern' | 'creative' | 'editorial'
@@ -39,6 +40,34 @@ export type SectionSpacing = 'compact' | 'default' | 'generous';
 
 export type Alignment = 'left' | 'center' | 'right' | 'mixed';
 
+// ─── New dimension types (v0.2) ───
+
+export type HierarchyDepth = 'flat' | 'moderate' | 'deep';
+
+export type ContrastStrategy = 'typography' | 'color' | 'space' | 'mixed';
+
+export type SpacingBase = '4px' | '8px';
+
+export type Rhythm = 'tight' | 'balanced' | 'airy';
+
+export type ContentStructure = 'linear' | 'modular' | 'hub';
+
+export type Scannability = 'low' | 'medium' | 'high';
+
+export type NavigationPattern = 'top' | 'side' | 'minimal' | 'hidden';
+
+export type Discoverability = 'explicit' | 'progressive' | 'implicit';
+
+export type CognitiveLoad = 'low' | 'medium' | 'high';
+
+export type FeedbackStrength = 'none' | 'subtle' | 'medium' | 'strong';
+
+export type PersonalityTrait =
+  | 'calm' | 'energetic' | 'premium' | 'playful'
+  | 'rational' | 'expressive' | 'warm' | 'cool'
+  | 'minimal' | 'bold' | 'elegant' | 'technical'
+  | 'friendly' | 'authoritative' | 'artistic' | 'clean';
+
 // ─── Dimension Configs ───
 
 export interface LayoutConfig {
@@ -76,6 +105,8 @@ export interface InteractionConfig {
   click_feedback?: ClickFeedback;
   focus?: FocusStyle;
   scroll_behavior?: ScrollBehavior;
+  discoverability?: Discoverability;
+  cognitive_load?: CognitiveLoad;
 }
 
 export interface MotionConfig {
@@ -84,6 +115,25 @@ export interface MotionConfig {
   easing?: string;
   reduced_motion?: boolean;
   entrance?: string;
+  feedback_strength?: FeedbackStrength;
+}
+
+export interface HierarchyConfig {
+  depth: HierarchyDepth;
+  primary_focus?: string;
+  contrast_strategy?: ContrastStrategy;
+}
+
+export interface SpacingConfig {
+  base: SpacingBase;
+  rhythm: Rhythm;
+  alignment?: Alignment;
+}
+
+export interface InformationConfig {
+  structure: ContentStructure;
+  scannability?: Scannability;
+  navigation?: NavigationPattern;
 }
 
 // ─── Top-level DSL ───
@@ -97,7 +147,10 @@ export interface DesignDSL {
   color: ColorConfig;
   interaction: InteractionConfig;
   motion: MotionConfig;
-  personality?: string;
+  hierarchy?: HierarchyConfig;
+  spacing?: SpacingConfig;
+  information?: InformationConfig;
+  personality?: string | PersonalityTrait[];
   sections?: string[];
 }
 

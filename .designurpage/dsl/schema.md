@@ -2,17 +2,20 @@
 
 > SiteSmith 的核心中间表示：所有设计意图最终都被编译为 Design DSL，所有代码生成都从 DSL 出发
 
-## 7 Design Dimensions（设计维度）
+## 10 Design Dimensions（设计维度）
 
 | 维度 | 含义 | 取值范围 |
 |------|------|---------|
-| `style` | 整体风格 | minimal / modern / creative / editorial / product / cyberpunk / portfolio |
+| `style` | 整体风格 | minimal / modern / creative / editorial / product / cyberpunk / portfolio / warm |
 | `layout` | 布局结构 | single-column / grid / asymmetric / reading-column / split / magazine |
 | `density` | 信息密度 | low / medium / high |
 | `typography` | 排版策略 | 字体配对 + 字号阶梯 + 行高 + 字重策略 |
 | `color` | 色彩策略 | monochrome / neutral / soft / vibrant / dark + accent + contrast |
 | `interaction` | 交互强度 | low / medium / high + hover/click/focus 具体行为 |
 | `motion` | 动效类型 | none / subtle-fade / scroll-driven / micro-interaction / 3D |
+| `hierarchy` | 视觉层级 | flat / moderate / deep + contrast strategy |
+| `spacing` | 间距与节奏 | 4px/8px base + tight/balanced/airy rhythm |
+| `information` | 信息架构 | linear/modular/hub + scannability + navigation pattern |
 
 ## Complete Schema
 
@@ -20,7 +23,7 @@
 {
   "$schema": "design-dsl/v1",
 
-  "style": "minimal | modern | creative | editorial | product | cyberpunk | portfolio",
+  "style": "minimal | modern | creative | editorial | product | cyberpunk | portfolio | warm",
 
   "layout": {
     "type": "single-column | grid | asymmetric | reading-column | split | magazine",
@@ -58,7 +61,9 @@
     "hover": "none | opacity | scale | shadow-lift | color-shift | underline",
     "click_feedback": "none | subtle-scale | ripple",
     "focus": "ring | outline | glow",
-    "scroll_behavior": "auto | smooth"
+    "scroll_behavior": "auto | smooth",
+    "discoverability": "explicit | progressive | implicit",
+    "cognitive_load": "low | medium | high"
   },
 
   "motion": {
@@ -66,17 +71,36 @@
     "duration": "100ms | 150ms | 200ms | 300ms | 500ms",
     "easing": "ease-out | ease-in-out | spring | cubic-bezier(...)",
     "reduced_motion": true,
-    "entrance": "fade | slide-up | scale | clip"
+    "entrance": "fade | slide-up | scale | clip",
+    "feedback_strength": "none | subtle | medium | strong"
   },
 
-  "personality": "string — 1-3 adjectives describing the feel (e.g., 'calm, rational, premium')"
+  "hierarchy": {
+    "depth": "flat | moderate | deep",
+    "primary_focus": "string — CSS selector or semantic label for the focal point",
+    "contrast_strategy": "typography | color | space | mixed"
+  },
+
+  "spacing": {
+    "base": "4px | 8px",
+    "rhythm": "tight | balanced | airy",
+    "alignment": "left | center | right | mixed"
+  },
+
+  "information": {
+    "structure": "linear | modular | hub",
+    "scannability": "low | medium | high",
+    "navigation": "top | side | minimal | hidden"
+  },
+
+  "personality": "string | string[] — trait tags from: calm, energetic, premium, playful, rational, expressive, warm, cool, minimal, bold, elegant, technical, friendly, authoritative, artistic, clean"
 }
 ```
 
 ## Field Details
 
 ### `style` — 整体风格标识
-决定了其他 6 个维度的默认值基线。选择一个 style 等于选择了一套预设，然后可以逐维度覆盖。
+决定了其他 9 个维度的默认值基线。选择一个 style 等于选择了一套预设，然后可以逐维度覆盖。
 
 ### `layout.type` — 布局模型
 | 值 | 含义 | 适用场景 |
@@ -135,6 +159,43 @@
 | `micro-interaction` | 按钮/输入框状态变化 | product |
 | `parallax` | `background-attachment / transform` | hero |
 
+### `hierarchy.depth` — 视觉层级深度
+| 值 | 含义 | z-index 层数 | 阴影深度 |
+|----|------|------------|---------|
+| `flat` | 扁平化 | 2层 | 浅 |
+| `moderate` | 常规层级 | 3层 | 中等 |
+| `deep` | 复杂层级 | 多层 | 深，多级阴影 |
+
+### `hierarchy.contrast_strategy` — 视觉层级对比策略
+| 值 | 含义 | 实现方式 |
+|----|------|---------|
+| `typography` | 通过字体大小/字重建立层级 | 更大的 heading scale |
+| `color` | 通过颜色饱和度/明度建立层级 | 焦点元素高饱和 |
+| `space` | 通过留白建立层级 | 焦点元素更大 padding |
+| `mixed` | 混合策略 | 综合运用以上 |
+
+### `spacing.rhythm` — 节奏/呼吸感
+| 值 | 乘数 | 效果 |
+|----|------|------|
+| `tight` | 0.75x | 紧凑，信息密集 |
+| `balanced` | 1x | 标准节奏 |
+| `airy` | 1.5x | 松弛，呼吸感强 |
+
+### `information.structure` — 内容架构模式
+| 值 | 含义 | 适用场景 |
+|----|------|---------|
+| `linear` | 线性流 — 从上到下叙事 | editorial, story page |
+| `modular` | 模块化 — 独立卡片/块 | portfolio, product |
+| `hub` | 中心辐射 — 中心 + 子页面 | dashboard, documentation |
+
+### `information.navigation` — 导航模式
+| 值 | 含义 | 适用场景 |
+|----|------|---------|
+| `top` | 顶部固定导航 | 通用 |
+| `side` | 侧边栏导航 | 文档, dashboard |
+| `minimal` | 极简导航（矮 bar） | 单页, minimal |
+| `hidden` | 隐藏导航（汉堡菜单） | creative, immersive |
+
 ## Validation Rules
 
 1. `density: "low"` + `layout.type: "grid"` + `columns > 3` → 警告：低密度不适合多列
@@ -142,3 +203,8 @@
 3. `color.mode: "monochrome"` + `color.contrast: "low"` → 可读性风险
 4. `typography.paragraph_width > 75ch` → 可读性警告
 5. `motion.reduced_motion` 必须为 `true`（可访问性要求）
+6. `hierarchy.depth: "deep"` + `density: "high"` → 视觉过载警告
+7. `spacing.rhythm: "tight"` + `density: "low"` → 节奏与密度冲突
+8. `information.navigation: "hidden"` + `interaction.cognitive_load: "low"` → 隐藏导航增加认知负担
+9. `information.scannability: "high"` + `information.structure: "linear"` → 高可扫读性适合 modular
+10. `motion.feedback_strength: "strong"` + `interaction.level: "low"` → 反馈过度

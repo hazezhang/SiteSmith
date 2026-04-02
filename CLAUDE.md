@@ -17,8 +17,9 @@ Design Intelligence Engine（设计智能引擎）
    ├── Design Critic        → /critique-design
    └── Consistency Guard    → /enforce-design-consistency
    ↓
-Design DSL（设计领域特定语言 — 7维度结构化表示）
+Design DSL（设计领域特定语言 — 10维度结构化表示）
    ├── style / layout / density / typography / color / interaction / motion
+   ├── hierarchy / spacing / information  ← NEW v0.2
    ├── Presets: minimal, modern, creative, editorial, product, cyberpunk, portfolio, warm
    └── DSL Compiler         → /translate-design-to-code
    ↓
@@ -36,7 +37,7 @@ Execution Layer（组件/页面/样式生成）
 
 ## Design DSL（核心中间表示）
 
-所有设计意图最终编译为 7 维度 DSL，所有代码生成从 DSL 出发：
+所有设计意图最终编译为 10 维度 DSL，所有代码生成从 DSL 出发：
 
 | 维度 | 含义 | 例子 |
 |------|------|------|
@@ -45,8 +46,11 @@ Execution Layer（组件/页面/样式生成）
 | `density` | 信息密度 | low / medium / high |
 | `typography` | 排版 | font pairing, scale, weight strategy |
 | `color` | 色彩策略 | monochrome / vibrant / soft / dark |
-| `interaction` | 交互强度 | hover/click/focus 行为 |
-| `motion` | 动效类型 | none / subtle-fade / scroll-driven |
+| `interaction` | 交互强度+哲学 | hover/click/focus + discoverability + cognitive_load |
+| `motion` | 动效+反馈 | none / subtle-fade / scroll-driven + feedback_strength |
+| `hierarchy` | 视觉层级 | flat / moderate / deep + contrast strategy |
+| `spacing` | 间距与节奏 | 4px/8px base + tight / balanced / airy rhythm |
+| `information` | 信息架构 | linear / modular / hub + scannability + navigation |
 
 DSL 规范位于 `.designurpage/dsl/`：
 - `schema.md` — 完整 schema 定义 + 字段详解 + 验证规则

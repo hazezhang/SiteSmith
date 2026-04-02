@@ -254,6 +254,130 @@ document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 ---
 
+## Hierarchy → CSS Variables + Classes
+
+### `hierarchy.depth`
+
+```
+flat:
+  --z-base: 0; --z-raised: 1; --z-overlay: 10;
+  --hierarchy-scale: 1.15;
+  --shadow-depth-1: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-depth-2: 0 2px 4px rgba(0,0,0,0.08);
+
+moderate:
+  --z-base: 0; --z-raised: 10; --z-overlay: 100;
+  --hierarchy-scale: 1.3;
+  --shadow-depth-1: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-depth-2: 0 4px 12px rgba(0,0,0,0.12);
+
+deep:
+  --z-base: 0; --z-raised: 10; --z-overlay: 1000;
+  --hierarchy-scale: 1.5;
+  --shadow-depth-1: 0 2px 4px rgba(0,0,0,0.1);
+  --shadow-depth-2: 0 8px 24px rgba(0,0,0,0.16);
+  .layer-raised { box-shadow: var(--shadow-depth-2); z-index: var(--z-raised); }
+  .layer-overlay { box-shadow: var(--shadow-depth-3); z-index: var(--z-overlay); }
+```
+
+### `hierarchy.contrast_strategy`
+
+```
+typography: --focus-heading-scale: 1.5; --focus-weight-boost: 800;
+color:      --focus-color-boost: 1; (focal point uses primary color)
+space:      --focus-space-boost: 1; (focal point gets extra padding)
+mixed:      --focus-heading-scale: 1.2; --focus-weight-boost: 700; (combined)
+```
+
+---
+
+## Spacing & Rhythm → CSS Variables + Classes
+
+### `spacing.base` + `spacing.rhythm`
+
+```css
+/* base: 8px, rhythm: airy (multiplier: 1.5) */
+:root {
+  --spacing-base: 8px;
+  --rhythm-multiplier: 1.5;
+  --rhythm-xs: 6.00px;    /* 8 × 0.5 × 1.5 */
+  --rhythm-sm: 12.00px;   /* 8 × 1 × 1.5 */
+  --rhythm-md: 24.00px;   /* 8 × 2 × 1.5 */
+  --rhythm-lg: 48.00px;   /* 8 × 4 × 1.5 */
+  --rhythm-xl: 96.00px;   /* 8 × 8 × 1.5 */
+  --rhythm-line: 36.00px;
+  --rhythm-paragraph: 48.00px;
+  --rhythm-section: 96.00px;
+}
+```
+
+### Rhythm utility classes
+
+```css
+.rhythm-tight > * + *    { margin-top: var(--rhythm-sm); }
+.rhythm-balanced > * + *  { margin-top: var(--rhythm-md); }
+.rhythm-airy > * + *      { margin-top: var(--rhythm-lg); }
+```
+
+---
+
+## Information Architecture → CSS Variables + Classes
+
+### `information.navigation`
+
+```
+top:     --nav-height: 64px; --nav-position: fixed; --content-offset: 64px;
+side:    --nav-width: 240px; --nav-height: 100vh; (side layout grid)
+minimal: --nav-height: 48px; --content-offset: 48px;
+hidden:  --nav-height: 0; (hamburger-only, slide-in transform)
+```
+
+### `information.structure`
+
+```css
+/* linear */
+.content-flow { display: flex; flex-direction: column; }
+.content-flow > * + * { margin-top: var(--rhythm-section); }
+
+/* modular */
+.content-flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--rhythm-lg); }
+
+/* hub */
+.content-flow > :first-child { grid-column: 1 / -1; text-align: center; padding: var(--space-16) 0; }
+.content-flow .sub-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+```
+
+### `information.scannability`
+
+```
+high:   --content-max-lines: 3; (truncation with -webkit-line-clamp)
+medium: --content-max-lines: 6;
+low:    --content-max-lines: none; (full narrative)
+```
+
+---
+
+## Expanded Interaction Fields → CSS
+
+### `interaction.discoverability`
+
+```
+explicit:    All interactive elements have visible affordances (borders, shadows, cursor changes)
+progressive: Elements reveal interactivity on hover/focus (subtle → obvious)
+implicit:    Minimal visual affordances; interactivity discovered through exploration
+```
+
+### `motion.feedback_strength`
+
+```
+none:   No active/click animation
+subtle: :active { transform: scale(0.99); }
+medium: :active { transform: scale(0.97); }
+strong: :active { transform: scale(0.95); } + bounce easing
+```
+
+---
+
 ## Full Example: Minimal DSL → Complete CSS
 
 **Input DSL:**
@@ -265,7 +389,11 @@ document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   "typography": { "font_pairing": ["Inter", "Inter"], "scale": "1.25", "line_height": "1.6" },
   "color": { "mode": "monochrome", "accent": "#007aff", "background": "#fafafa", "text": "#171717" },
   "interaction": { "level": "low", "hover": "opacity" },
-  "motion": { "type": "subtle-fade", "duration": "200ms", "easing": "ease-out" }
+  "motion": { "type": "subtle-fade", "duration": "200ms", "easing": "ease-out" },
+  "hierarchy": { "depth": "flat", "contrast_strategy": "space" },
+  "spacing": { "base": "8px", "rhythm": "airy", "alignment": "center" },
+  "information": { "structure": "linear", "scannability": "high", "navigation": "minimal" },
+  "personality": ["calm", "premium", "clean"]
 }
 ```
 
@@ -317,6 +445,21 @@ document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   /* Motion */
   --entrance-duration: 200ms;
   --entrance-easing: ease-out;
+
+  /* Hierarchy */
+  --z-raised: 1;
+  --hierarchy-scale: 1.15;
+  --shadow-depth-1: 0 1px 2px rgba(0,0,0,0.05);
+
+  /* Spacing & Rhythm */
+  --spacing-base: 8px;
+  --rhythm-multiplier: 1.5;
+  --rhythm-sm: 12px;
+  --rhythm-lg: 48px;
+
+  /* Information */
+  --nav-height: 48px;
+  --content-offset: 48px;
 }
 ```
 

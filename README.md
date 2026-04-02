@@ -6,7 +6,7 @@
 
 > "Not just another website builder — SiteSmith turns the design thinking process into a structured DSL, reusable skills, and interactive human-in-the-loop workflows."
 
-SiteSmith is a Claude Code-powered agent system that helps you build personal websites **like collaborating with a designer**: AI proposes directions, explains trade-offs, and you make decisions at every critical checkpoint. All design decisions are captured in a **7-dimension Design DSL** that compiles deterministically to CSS — style refinements are DSL diffs, never regeneration.
+SiteSmith is a Claude Code-powered agent system that helps you build personal websites **like collaborating with a designer**: AI proposes directions, explains trade-offs, and you make decisions at every critical checkpoint. All design decisions are captured in a **10-dimension Design DSL** that compiles deterministically to CSS — style refinements are DSL diffs, never regeneration.
 
 ---
 
@@ -39,7 +39,7 @@ Execution Layer (component / page / style generation)
 
 ### 1. Design DSL — A Structured Language for Design Decisions
 
-Every website inspiration can be decomposed into 7 dimensions:
+Every website inspiration can be decomposed into 10 dimensions:
 
 | Dimension | Meaning | Examples |
 |-----------|---------|---------|
@@ -48,8 +48,11 @@ Every website inspiration can be decomposed into 7 dimensions:
 | `density` | Information density | low / medium / high |
 | `typography` | Type strategy | font pairing, scale, weight |
 | `color` | Color strategy | monochrome / vibrant / soft / dark |
-| `interaction` | Interaction intensity | hover / click / scroll behaviors |
-| `motion` | Animation type | none / subtle-fade / scroll-driven |
+| `interaction` | Interaction philosophy | hover/click/focus + discoverability + cognitive load |
+| `motion` | Animation + feedback | none / subtle-fade / scroll-driven + feedback strength |
+| `hierarchy` | Visual hierarchy | flat / moderate / deep + contrast strategy |
+| `spacing` | Spacing & rhythm | 4px/8px base + tight / balanced / airy |
+| `information` | Information architecture | linear / modular / hub + scannability + navigation |
 
 ```json
 {
@@ -256,7 +259,7 @@ SiteSmith/
 
 ## Design Principles
 
-1. **DSL-driven** — All design decisions are 7-dimension DSL parameters, deterministically compiled to code
+1. **DSL-driven** — All design decisions are 10-dimension DSL parameters, deterministically compiled to code
 2. **Diff, not regenerate** — Style changes = DSL diff → CSS variable diff → entire site auto-updates
 3. **Structured intent** — "Like Apple but more playful" → specific DSL parameter changes, not vague prompts
 4. **Proactive suggestions** — AI proposes directions with trade-offs, users decide

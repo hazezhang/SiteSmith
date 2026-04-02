@@ -6,7 +6,7 @@
 
 > "不只是又一个建站工具 — SiteSmith 把设计师的思考过程结构化为 DSL、可复用技能和人机协作工作流。"
 
-SiteSmith 是一个基于 Claude Code 的 Agent 系统，帮你**像和设计师合作一样**搭建个人网站：AI 提出设计方向、解释利弊权衡，你在每个关键节点做决策。所有设计决策都被捕获为 **7 维度 Design DSL**，确定性编译为 CSS — 风格微调是 DSL diff，不是重新生成。
+SiteSmith 是一个基于 Claude Code 的 Agent 系统，帮你**像和设计师合作一样**搭建个人网站：AI 提出设计方向、解释利弊权衡，你在每个关键节点做决策。所有设计决策都被捕获为 **10 维度 Design DSL**，确定性编译为 CSS — 风格微调是 DSL diff，不是重新生成。
 
 > 💡 借鉴 [ARIS](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep) 的 skill 治理体系：纯 Markdown 文件、零依赖、零锁定。每个 skill 就是一个 `SKILL.md`，可被任何 LLM 读取 — 换成 Cursor、Trae、Codex CLI 或你自己的 Agent，工作流依然有效。
 
@@ -41,7 +41,7 @@ Design DSL（7维度结构化表示）
 
 ### 1. Design DSL — 设计决策的结构化语言
 
-每个网站灵感都可以分解为 7 个维度：
+每个网站灵感都可以分解为 10 个维度：
 
 | 维度 | 含义 | 示例 |
 |------|------|------|
@@ -50,8 +50,11 @@ Design DSL（7维度结构化表示）
 | `density` | 信息密度 | low / medium / high |
 | `typography` | 排版策略 | 字体配对、字号阶梯、字重 |
 | `color` | 色彩策略 | monochrome / vibrant / soft / dark |
-| `interaction` | 交互强度 | hover / click / scroll 行为 |
-| `motion` | 动效类型 | none / subtle-fade / scroll-driven |
+| `interaction` | 交互哲学 | hover/click/focus + 可发现性 + 认知负担 |
+| `motion` | 动效+反馈 | none / subtle-fade / scroll-driven + 反馈强度 |
+| `hierarchy` | 视觉层级 | flat / moderate / deep + 对比策略 |
+| `spacing` | 间距与节奏 | 4px/8px 基础 + tight / balanced / airy |
+| `information` | 信息架构 | linear / modular / hub + 可扫读性 + 导航模式 |
 
 ```json
 {
@@ -291,7 +294,7 @@ SiteSmith/
 
 ## 设计原则
 
-1. **DSL 驱动** — 所有设计决策都是 7 维度 DSL 参数，确定性编译为代码
+1. **DSL 驱动** — 所有设计决策都是 10 维度 DSL 参数，确定性编译为代码
 2. **Diff 而非重生成** — 风格变更 = DSL diff → CSS 变量 diff → 全站自动生效
 3. **结构化意图** — "像 Apple 但更活泼" → 具体 DSL 参数变更，不是模糊 prompt
 4. **主动建议** — AI 像设计师一样提出方向 + 解释利弊，用户做决策
